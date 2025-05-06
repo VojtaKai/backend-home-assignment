@@ -1,0 +1,13 @@
+{
+  "name": "backend-home-assignment",
+  "version": "1.0.0",
+  "scripts": {
+    "collector": "tsx src/collector.ts",
+    "writer": "tsx src/writer.ts",
+    "all": "tsx src/collector.ts && tsx src/writer.ts"
+  },
+  "packageManager": "pnpm@10.7.1",
+  "dependencies": {
+    "tsx": "^4.19.4"
+  }
+}
