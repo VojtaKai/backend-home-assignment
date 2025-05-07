@@ -14,7 +14,7 @@ Every service required to complete the assignment is defined in the `docker-comp
 docker-compose up -d
 ```
 
-This will start a Postgres database on local port `5432`, Mosquitto MQTT broker on port `1883`, RabbitMQ on port `5672` and helper script which will initialize the database tables and start the electrical car simulation. All important credentials for connecting to the services can be seen in the `docker-compose.yml` file itself.
+This will start a Postgres database on local port `55432`, Mosquitto MQTT broker on port `51883`, RabbitMQ on port `55672` and helper script which will initialize the database tables and start the electrical car simulation. All important credentials for connecting to the services can be seen in the `docker-compose.yml` file itself.
 
 ## Data description
 
