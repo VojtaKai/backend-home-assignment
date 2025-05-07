@@ -46,7 +46,7 @@ services:
     restart: always
   
   delta-helper:
-    image: delta/home-assignment-helper:latest
+    image: europe-west3-docker.pkg.dev/nano-green-1/public/backend-home-assignment-helper:latest
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
       MQTT_URL: mqtt://mosquitto:1883
