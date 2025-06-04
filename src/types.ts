@@ -3,14 +3,13 @@ export interface BatteryDetail {
     capacity?: number;
 }
 
-export type Battery = Record<number, {
+export type Battery = Record<string, {
     soc?: number | undefined;
     capacity?: number | undefined;
 }>
 
 export type Gear = "N" | "1" | "2" | "3" | "4" | "5" | "6"
 
-// interface for car data
 export interface CarData {
     id: number;
     latitude?: number;
@@ -19,5 +18,3 @@ export interface CarData {
     gear?: Gear;
     battery?: Battery;
 }
-
-export type CarDataWithRequiredFields = Required<CarData>

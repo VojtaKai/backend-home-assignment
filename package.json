@@ -4,7 +4,10 @@
   "scripts": {
     "collector": "tsx src/collector.ts",
     "writer": "tsx src/writer.ts",
-    "all": "tsx src/collector.ts && tsx src/writer.ts"
+    "collector:dist": "node dist/collector.js",
+    "writer:dist": "node dist/writer.js",
+    "all": "concurrently \"node dist/collector.js\" \"node dist/writer.js\"",
+    "prisma:generate": "prisma generate"
   },
   "packageManager": "pnpm@10.7.1",
   "dependencies": {
@@ -19,6 +22,7 @@
     "@types/amqplib": "^0.10.7",
     "@types/mqtt": "^0.0.34",
     "@types/node": "^22.15.29",
+    "concurrently": "^9.1.2",
     "typescript": "^5.8.3"
   }
 }

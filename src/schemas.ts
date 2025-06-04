@@ -6,10 +6,10 @@ export const carDataSchema = z.object({
     longitude: z.number().optional(),
     speed: z.number().optional(),
     gear: z.string().optional(),
-    battery: z.record(z.number(), z.object({
+    battery: z.record(z.string(), z.object({
         soc: z.number().optional(),
         capacity: z.number().optional()
-    }))
+    })).optional()
 });
 
 // Schema for validating complete car data with all required fields
@@ -29,10 +29,9 @@ export const completeCarDataSchema = z.object({
     })
 });
 
-export const carStateModelSchema = z.object({
-    id: z.number().optional(),
+export const carStateSchema = z.object({
     carId: z.number(),
-    time: z.date(),
+    time: z.date().optional(),
     latitude: z.number(),
     longitude: z.number(),
     speed: z.number(),

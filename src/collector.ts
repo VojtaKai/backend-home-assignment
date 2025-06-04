@@ -1,18 +1,11 @@
 import mqtt from 'mqtt';
 import amqp from 'amqplib';
 import { CarData, Gear } from './types';
-import { completeCarDataSchema } from './schemas';
-
-// Constants for MQTT configuration
-const MQTT_BROKER = 'mqtt://localhost:51883';
-const RABBITMQ_BROKER = 'amqp://admin:admin@localhost:55672';
-const RABBITMQ_QUEUE = 'car_data';
-
-const carDataMap: Map<number, CarData> = new Map(); // Map to store car data by car ID
-const carIdsInitializedProperly: Set<number> = new Set(); // Set to store car IDs that have been initialized properly
+import { RABBITMQ_QUEUE } from './queues';
+import { MQTT_BROKER_URL, RABBITMQ_BROKER_URL } from './constants';
 
 // Connect to MQTT broker
-const mqttClient = mqtt.connect(MQTT_BROKER);
+const mqttClient = mqtt.connect(MQTT_BROKER_URL);
 
 // Handle MQTT connection
 mqttClient.on('connect', () => {
@@ -39,7 +32,7 @@ mqttClient.on('connect', () => {
 });
 
 async function sendDataToRabbitMQ(carData: CarData) {
-    const rabbitmqConnection = await amqp.connect(RABBITMQ_BROKER);
+    const rabbitmqConnection = await amqp.connect(RABBITMQ_BROKER_URL);
     const channel = await rabbitmqConnection.createChannel();
     await channel.assertQueue(RABBITMQ_QUEUE);
 
@@ -76,14 +69,6 @@ mqttClient.on('message', async (topic: string, message: Buffer) => {
             id: carId
         };
 
-        if (carDataMap.has(carId)) {
-            carDataBuffer = carDataMap.get(carId)!;
-        } else {
-            carDataMap.set(carId, carDataBuffer);
-        }
-
-        // Create a buffer to store the latest data
-
         console.log(`Received message on topic ${topic}: ${value}`);
 
         const dataType = topicParts[topicParts.length - 1];
@@ -104,53 +89,21 @@ mqttClient.on('message', async (topic: string, message: Buffer) => {
                 break;
             case 'soc': {
                 const batteryIndex = topicParts[topicParts.length - 2];
-
-                if (!batteryIndex) {
-                    throw new Error('Battery index not found');
-                }
-
-                if (carDataBuffer.battery && carDataBuffer.battery[parseInt(batteryIndex)]) {
-                    carDataBuffer.battery[parseInt(batteryIndex)].soc = parseFloat(value);
-                } else {
-                    carDataBuffer.battery = {...carDataBuffer.battery ?? {}, [parseInt(batteryIndex)]: { soc: parseFloat(value) }};
-                }
-
+                carDataBuffer.battery = {[batteryIndex]: { soc: parseFloat(value) }};
                 break;
             }
             case 'capacity': {
                 const batteryIndex = topicParts[topicParts.length - 2];
-
-                if (!batteryIndex) {
-                    throw new Error('Battery index not found');
-                }
-
-                if (carDataBuffer.battery && carDataBuffer.battery[parseInt(batteryIndex)]) {
-                    carDataBuffer.battery[parseInt(batteryIndex)].capacity = parseFloat(value);
-                } else {
-                    carDataBuffer.battery = {...carDataBuffer.battery ?? {}, [parseInt(batteryIndex)]: { capacity: parseFloat(value) }};
-                }
+                carDataBuffer.battery = {[batteryIndex]: { capacity: parseFloat(value) }};
                 break;
             }
             default:
                 throw new Error(`Unknown data type: ${dataType}`);
         }
 
-        // Prepare a full object for the first time. Then partial objects are okay
-        if (!carIdsInitializedProperly.has(carId)) {
-            try {
-                const carDataWithRequiredFields = completeCarDataSchema.parse(carDataBuffer);
-                const result = await sendDataToRabbitMQ(carDataWithRequiredFields);
-                if (result) {
-                    carIdsInitializedProperly.add(carId);
-                }
-            } catch (error) {
-                console.log(`Object is incomplete. Skipping...`);
-                console.log(`Data so far: ${JSON.stringify(carDataBuffer, undefined, 2)}`);
-            }
-        } else {
-            console.log(`Data complete: ${JSON.stringify(carDataBuffer, undefined, 2)}`)
-            // await sendDataToRabbitMQ(carDataBuffer);
-        }
+        console.log(`Car data buffer: ${JSON.stringify(carDataBuffer, undefined, 2)}`);
+
+        await sendDataToRabbitMQ(carDataBuffer);
     } catch (error) {
         console.error('Error processing message:', error);
     }
@@ -171,19 +124,3 @@ process.on('SIGINT', () => {
     mqttClient.end();
     process.exit();
 });
-
-// async function test_rabbitmq() {
-//     const carData: CarData = {
-//         id: 1,
-//         latitude: 1,
-//         longitude: 1,
-//         speed: 1,
-//         gear: '1',
-//         battery: {},
-//         createdAt: Date.now(),
-//         lastUpdated: Date.now()
-//     }
-//     await sendDataToRabbitMQ(carData);
-// }
-
-// void test_rabbitmq()
