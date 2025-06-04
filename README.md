@@ -58,26 +58,26 @@ Please make a fork of this repo and work in your own fork. After the completion 
 
 # How to start the Project
 ## Install Packages
-pnmp install
+`pnpm install`
 
-# Start Docker compose
-docker-compose up
+## Start Docker compose
+`docker-compose up`
 
 ## Prisma Setup
 To .env add
 DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/postgres
 
-Generate Prisma Client
+Generate Prisma Client \
 `npx prisma generate`
 
 ## Apply Prisma migrations (Optional)
-Baseline script for Running Postgres Instance
+Baseline script for Running Postgres Instance \
 `npx prisma migrate resolve --applied 0_init`
 
-Apply Migrations Changes
+Apply Migrations Changes \
 `npx prisma migrate deploy`
 
-Generate Prisma Client (Again)
+Generate Prisma Client (Again) \
 `npx prisma generate`
 
 ## Compile Project
