@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Collector",
+        "program": "${workspaceFolder}/dist/collector.js",
+        "sourceMaps": true,
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+        "preLaunchTask": "tsc: watch - src",
+        "skipFiles": ["<node_internals>/**"],
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Writer",
+        "program": "${workspaceFolder}/dist/writer.js",
+        "sourceMaps": true,
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+        "preLaunchTask": "tsc: watch - src",
+        "skipFiles": ["<node_internals>/**"],
+        "cwd": "${workspaceFolder}"
+      }
+    ]
+  }
+  
