@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CarState {
+  id            Int      @id @default(autoincrement())
+  carId         Int      @map("car_id")
+  time          DateTime @map("time") @db.Timestamp(6)
+  stateOfCharge Int      @map("state_of_charge")
+  latitude      Float    @map("latitude")
+  longitude     Float    @map("longitude")
+  gear          Int      @map("gear")
+  speed         Float    @map("speed")
+
+  @@index([carId])
+  @@map("car_state")
+}
+

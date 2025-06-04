@@ -55,3 +55,34 @@ For this task you should work only with one car with id `1`. It has two batterie
 ## Finishing the assignment
 
 Please make a fork of this repo and work in your own fork. After the completion share the forked repo link with your interviewer (make sure it is public) and wait for further instructions.
+
+# How to start the Project
+## Install Packages
+`pnpm install`
+
+## Start Docker compose
+`docker-compose up`
+
+## Prisma Setup
+To .env add
+DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/postgres
+
+Generate Prisma Client \
+`npx prisma generate`
+
+## Apply Prisma migrations (Optional)
+Baseline script for Running Postgres Instance \
+`npx prisma migrate resolve --applied 0_init`
+
+Apply Migrations Changes \
+`npx prisma migrate deploy`
+
+Generate Prisma Client (Again) \
+`npx prisma generate`
+
+## Compile Project
+`CTRL+SHIP+P > Tasks: Run Task > tsc: watch - src`
+
+## Run Collector and Writer separately
+`npm run collector:dist`
+`npm run writer:dist`
