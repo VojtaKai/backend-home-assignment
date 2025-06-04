@@ -65,7 +65,7 @@ Please make a fork of this repo and work in your own fork. After the completion 
 
 ## Prisma Setup
 To .env add
-DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/postgres
+DATABASE_URL=postgresql://\<user>:\<password>@\<host>:\<port>/postgres
 
 Generate Prisma Client \
 `npx prisma generate`
