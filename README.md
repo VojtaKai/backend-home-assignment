@@ -61,7 +61,7 @@ Please make a fork of this repo and work in your own fork. After the completion 
 `pnpm install`
 
 ## Start Docker compose
-`docker-compose up`
+`docker-compose up -d`
 
 ## Prisma Setup
 To .env add
