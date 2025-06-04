@@ -84,5 +84,5 @@ Generate Prisma Client (Again) \
 `CTRL+SHIP+P > Tasks: Run Task > tsc: watch - src`
 
 ## Run Collector and Writer separately
-`npm run collector:dist`
+`npm run collector:dist` \
 `npm run writer:dist`
